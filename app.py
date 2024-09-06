@@ -8,32 +8,20 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import train_test_split
 
 from selenium import webdriver
-from selenium.webdriver.chrome import service 
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC 
-from selenium.webdriver.chrome.options import Options 
-from selenium.webdriver.common.by import By 
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.firefox.options import Options 
 from time import sleep 
 import json
 import csv 
 
 app = Flask(__name__)
 
-webdriver_service = service.Service(ChromeDriverManager().install())
-#webdriver_service.start()
-options = webdriver.ChromeOptions()
-#options.binary_location = "C:/Program Files/Google/Chrome/Application/chrome.exe"
-options.add_argument('--disable-logging')
-options.add_argument('--no-sendbox')
-options.add_argument('--disable-dev-shm-usage')
-options.add_argument('--dstart-maximized')
-options.add_argument('--disable-extentions')
-options.add_argument('--disable-popup-blocking')
-options.add_argument('--disable-gpu')
-options.add_argument('--disable-infobars')
-options.add_argument('--disable-blink-features=AutomationControlled')
-options.add_experimental_option('w3c',True)
+options = Options()
+options.headless = True
+
 
 df = pd.read_csv('1XBetCrash.csv')
 driver = None
@@ -45,7 +33,7 @@ def index():
 @app.route('/crash', methods=['POST','GET'])
 def crash():
 	global driver
-	driver = webdriver.Chrome(service = webdriver_service,options=options)
+	driver = webdriver.Firefox(options=options)
 	driver.get('https://1xbet.com/fr/allgamesentrance/crash')
 	WebDriverWait(driver, 60).until(
 			EC.presence_of_element_located((By.CLASS_NAME, 'games-project-frame__item'))
