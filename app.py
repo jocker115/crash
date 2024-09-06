@@ -20,7 +20,7 @@ import csv
 app = Flask(__name__)
 
 options = Options()
-options.headless = True
+options.headless = False
 
 
 df = pd.read_csv('1XBetCrash.csv')
